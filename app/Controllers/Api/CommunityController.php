@@ -1184,6 +1184,66 @@ class CommunityController extends BaseController
     ] );
   }
 
+  public function adminGetDashboardStats()
+  {
+    $totalUsers     = $this->db->table ( 'users' )->countAllResults ();
+    $totalPosts     = $this->postModel->where ( 'status !=', 'deleted' )->countAllResults ();
+    $totalComments  = $this->commentModel->countAllResults ();
+    $pendingReports = $this->reportModel->join ( 'community_posts', 'community_posts.id = community_post_reports.post_id' )
+      ->where ( 'community_posts.status', 'active' )
+      ->countAllResults ();
+
+    $engagement = $this->postModel->select ( 'SUM(likes_count) as total_likes, SUM(comments_count) as total_comments' )->first ();
+    $totalEngagement = ( (int) ( $engagement['total_likes'] ?? 0 ) ) + ( (int) ( $engagement['total_comments'] ?? 0 ) );
+
+    return $this->sendResponse ( true, 'Dashboard stats retrieved', [
+      'total_users'      => $totalUsers,
+      'total_posts'      => $totalPosts,
+      'total_comments'   => $totalComments,
+      'pending_reports'  => $pendingReports,
+      'total_engagement' => $totalEngagement
+    ] );
+  }
+
+  public function adminAddPost()
+  {
+    $postText   = $this->request->getPost ( 'post_text' );
+    $channelId  = $this->request->getPost ( 'channel_id' );
+    $adminId    = $this->request->getPost ( 'admin_id' ) ?? 1; // Default to system admin
+    $mediaFiles = $this->request->getFileMultiple ( 'media' ) ?? [];
+
+    $postData = [
+      'user_id'    => $adminId,
+      'user_type'  => 'admin', // Critical for frontend display as "Petsfolio"
+      'post_text'  => $postText,
+      'channel_id' => $channelId,
+      'status'     => 'active',
+      'post_type'  => count ( $mediaFiles ) > 0 ? 'image' : 'text'
+    ];
+
+    if ( !$this->postModel->insert ( $postData ) ) {
+      return $this->sendResponse ( false, 'Failed to create post', $this->postModel->errors () );
+    }
+
+    $postId = $this->postModel->getInsertID ();
+
+    // Handle Media
+    foreach ( $mediaFiles as $file ) {
+      if ( $file->isValid () && !$file->hasMoved () ) {
+        $newName = $file->getRandomName ();
+        $file->move ( ROOTPATH . 'public/uploads/community/', $newName );
+
+        $this->mediaModel->insert ( [
+          'post_id'    => $postId,
+          'media_url'  => $newName,
+          'media_type' => 'image'
+        ] );
+      }
+    }
+
+    return $this->sendResponse ( true, 'Post created successfully', ['id' => $postId] );
+  }
+
   // --- ADMIN API FUNCTIONS ---
 
   public function adminGetChannels()
@@ -1201,6 +1261,7 @@ class CommunityController extends BaseController
     $channels = $query->findAll ();
     foreach ( $channels as &$channel ) {
       $channel['member_count'] = $this->channelJoinModel->where ( 'channel_id', $channel['id'] )->countAllResults ();
+      $channel['post_count']   = $this->postChannelModel->where ( 'channel_id', $channel['id'] )->countAllResults ();
       $channel['icon_url']     = base_url ( 'admin/public/uploads/community/icons/' . $channel['icon'] );
     }
 

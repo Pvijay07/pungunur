@@ -56,6 +56,7 @@ $routes->group ( 'community', ['namespace' => 'App\Controllers\Api'], function (
     $routes->post ( 'adminUpdateChannel' );
     $routes->post ( 'adminDeleteChannel' );
     $routes->get ( 'adminGetPosts' );
+    $routes->post ( 'adminAddPost' );
     $routes->post ( 'adminApprovePost' );
     $routes->post ( 'adminTogglePin' );
     $routes->post ( 'adminDeletePost' );
@@ -67,7 +68,15 @@ $routes->group ( 'community', ['namespace' => 'App\Controllers\Api'], function (
     $routes->post ( 'adminAddReply' );
     $routes->post ( 'adminDeleteComment' );
     $routes->get ( 'adminProcessScheduledPosts' );
+    $routes->get ( 'adminGetDashboardStats' );
 
   } );
+} );
 
+$routes->group ( 'auth', ['namespace' => 'App\Controllers\Api'], function ( $routes )
+{
+  $routes->post ( 'login', 'AuthController::login' );
+  $routes->post ( 'adminLogin', 'AuthController::adminLogin' );
+  $routes->get ( 'getProfile', 'AuthController::getProfile' );
+  $routes->post ( 'updateProfile', 'AuthController::updateProfile' );
 } );
