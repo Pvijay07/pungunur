@@ -2,9 +2,7 @@
 
 namespace App\Libraries;
 
-use Twilio\Rest\Client;
-
-class SmsEmailLibrary
+class Sms_helper
 {
   protected $email;
   protected $bulkSmsUrl;
