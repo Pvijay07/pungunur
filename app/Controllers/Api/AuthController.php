@@ -52,21 +52,23 @@ class AuthController extends BaseController
     }
     public function verifyOtp()
     {
-        $phone = $this->request->getVar ( 'phone' );
-        $otp   = $this->request->getVar ( 'otp' );
+        $phone        = $this->request->getVar ( 'phone' );
+        $otp          = $this->request->getVar ( 'otp' );
+        $device_token = $this->request->getVar ( 'device_token' );
+
         if ( $phone && $otp ) {
             // Verify OTP
             $user = $this->userModel->check ( $phone, $otp );
             if ( $user ) {
                 $token = bin2hex ( random_bytes ( 16 ) );
-                $this->userModel->update ( $user->id, ['auth_token' => $token] );
+                $this->userModel->update ( $user->id, ['auth_token' => $token, 'device_token' => $device_token] );
                 $user->auth_token = $token;
                 return $this->sendResponse ( true, 'Login successful', $user );
             }
             return $this->sendResponse ( false, 'Invalid phone or OTP', [], 401 );
 
         }
-        return $this->sendResponse ( true, 'Login successful', $user );
+        return $this->sendResponse ( false, 'Phone number and OTP are required', [], 400 );
 
     }
 
