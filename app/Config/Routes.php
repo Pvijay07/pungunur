@@ -8,7 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get ( '/', 'Home::index' );
 
 
-$routes->group ( 'community', ['namespace' => 'App\Controllers\Api'], function ( $routes )
+$routes->group ( 'api/community', ['namespace' => 'App\Controllers\Api'], function ( $routes )
 {
   $routes->post ( 'createPost', 'CommunityController::createPost' );
   $routes->post ( 'updatePost', 'CommunityController::updatePost' );
