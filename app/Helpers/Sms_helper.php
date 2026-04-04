@@ -27,7 +27,7 @@ class Sms_helper
 
     try {
       $message    = "%27Dear%20Customer,Your%20OTP%20number%20is%20$body,Regards%20PETSFOLIO%27";
-      $url        = $this->buildSmsUrl ( $phone, $message );
+      $url        = self::buildSmsUrl ( $phone, $message );
       $response   = $curl->request ( 'GET', $url );
       $statusCode = $response->getStatusCode ();
       if ( $statusCode == 200 ) {
@@ -40,11 +40,11 @@ class Sms_helper
       return 500;
     }
   }
-  private function buildSmsUrl( $phone, $message )
+  private static function buildSmsUrl( $phone, $message )
   {
-    return $this->bulkSmsUrl .
-      'user=' . $this->bulkSmsUser .
-      '&password=' . $this->bulkSmsPassword .
+    return self::bulkSmsUrl .
+      'user=' . self::bulkSmsUser .
+      '&password=' . self::bulkSmsPassword .
       '&mobile=' . $phone .
       '&message=' . $message .
       '&sender=PFSIND&type=3&template_id=1207168240213327862';
