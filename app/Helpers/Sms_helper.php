@@ -9,6 +9,7 @@ class Sms_helper
   protected $bulkSmsUser;
   protected $bulkSmsPassword;
   protected $from;
+
   protected $domain;
 
   public function __construct()
