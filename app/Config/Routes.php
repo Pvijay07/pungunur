@@ -10,67 +10,61 @@ $routes->get ( '/', 'Home::index' );
 
 $routes->group ( 'community', ['namespace' => 'App\Controllers\Api'], function ( $routes )
 {
+  $routes->post ( 'createPost', 'CommunityController::createPost' );
+  $routes->post ( 'updatePost', 'CommunityController::updatePost' );
+  $routes->post ( 'deletePost', 'CommunityController::deletePost' );
 
-  $routes->controller ( 'CommunityController', function ( $routes )
-  {
+  $routes->get ( 'getAllPosts', 'CommunityController::getAllPosts' );
+  $routes->get ( 'getTrendingFeed', 'CommunityController::getTrendingFeed' );
+  $routes->get ( 'getPostByChannel', 'CommunityController::getPostByChannel' );
+  $routes->get ( 'getAllChannels', 'CommunityController::getAllChannels' );
 
-    $routes->post ( 'createPost' );
-    $routes->post ( 'updatePost' );
-    $routes->post ( 'deletePost' );
+  $routes->post ( 'joinChannel', 'CommunityController::joinChannel' );
 
-    $routes->get ( 'getAllPosts' );
-    $routes->get ( 'getTrendingFeed' );
-    $routes->get ( 'getPostByChannel' );
-    $routes->get ( 'getAllChannels' );
+  $routes->post ( 'LikePost', 'CommunityController::LikePost' );
+  $routes->post ( 'DislikePost', 'CommunityController::DislikePost' );
 
-    $routes->post ( 'joinChannel' );
+  $routes->post ( 'addComment', 'CommunityController::addComment' );
+  $routes->post ( 'replyToComment', 'CommunityController::addComment' );
 
-    $routes->post ( 'LikePost' );
-    $routes->post ( 'DislikePost' );
+  $routes->post ( 'deleteComment', 'CommunityController::deleteComment' );
+  $routes->post ( 'likeAndDislikeForAComment', 'CommunityController::likeAndDislikeForAComment' );
+  $routes->post ( 'DislikeComment', 'CommunityController::DislikeComment' );
 
-    $routes->post ( 'addComment' );
-    $routes->post ( 'replyToComment', 'addComment' );
+  $routes->get ( 'getMyPosts', 'CommunityController::getMyPosts' );
+  $routes->get ( 'getMyComments', 'CommunityController::getMyComments' );
+  $routes->get ( 'getMySavedPosts', 'CommunityController::getMySavedPosts' );
 
-    $routes->post ( 'deleteComment' );
-    $routes->post ( 'likeAndDislikeForAComment' );
-    $routes->post ( 'DislikeComment' );
+  $routes->post ( 'saveMyPost', 'CommunityController::saveMyPost' );
 
-    $routes->get ( 'getMyPosts' );
-    $routes->get ( 'getMyComments' );
-    $routes->get ( 'getMySavedPosts' );
+  $routes->post ( 'ReportPost', 'CommunityController::ReportPost' );
+  $routes->post ( 'ReportComment', 'CommunityController::ReportComment' );
 
-    $routes->post ( 'saveMyPost' );
+  $routes->get ( 'getPostById', 'CommunityController::getPostById' );
 
-    $routes->post ( 'ReportPost' );
-    $routes->post ( 'ReportComment' );
+  $routes->post ( 'deleteMedia', 'CommunityController::deleteMedia' );
 
-    $routes->get ( 'getPostById' );
+  $routes->get ( 'search', 'CommunityController::search' );
 
-    $routes->post ( 'deleteMedia' );
-
-    $routes->get ( 'search' );
-
-    // Admin APIs
-    $routes->get ( 'adminGetChannels' );
-    $routes->post ( 'adminAddChannel' );
-    $routes->post ( 'adminUpdateChannel' );
-    $routes->post ( 'adminDeleteChannel' );
-    $routes->get ( 'adminGetPosts' );
-    $routes->post ( 'adminAddPost' );
-    $routes->post ( 'adminApprovePost' );
-    $routes->post ( 'adminTogglePin' );
-    $routes->post ( 'adminDeletePost' );
-    $routes->post ( 'adminBlockPost' );
-    $routes->post ( 'adminUnblockPost' );
-    $routes->get ( 'adminGetReports' );
-    $routes->post ( 'adminDismissReport' );
-    $routes->post ( 'adminDismissAllReports' );
-    $routes->post ( 'adminAddReply' );
-    $routes->post ( 'adminDeleteComment' );
-    $routes->get ( 'adminProcessScheduledPosts' );
-    $routes->get ( 'adminGetDashboardStats' );
-
-  } );
+  // Admin APIs
+  $routes->get ( 'adminGetChannels', 'CommunityController::adminGetChannels' );
+  $routes->post ( 'adminAddChannel', 'CommunityController::adminAddChannel' );
+  $routes->post ( 'adminUpdateChannel', 'CommunityController::adminUpdateChannel' );
+  $routes->post ( 'adminDeleteChannel', 'CommunityController::adminDeleteChannel' );
+  $routes->get ( 'adminGetPosts', 'CommunityController::adminGetPosts' );
+  $routes->post ( 'adminAddPost', 'CommunityController::adminAddPost' );
+  $routes->post ( 'adminApprovePost', 'CommunityController::adminApprovePost' );
+  $routes->post ( 'adminTogglePin', 'CommunityController::adminTogglePin' );
+  $routes->post ( 'adminDeletePost', 'CommunityController::adminDeletePost' );
+  $routes->post ( 'adminBlockPost', 'CommunityController::adminBlockPost' );
+  $routes->post ( 'adminUnblockPost', 'CommunityController::adminUnblockPost' );
+  $routes->get ( 'adminGetReports', 'CommunityController::adminGetReports' );
+  $routes->post ( 'adminDismissReport', 'CommunityController::adminDismissReport' );
+  $routes->post ( 'adminDismissAllReports', 'CommunityController::adminDismissAllReports' );
+  $routes->post ( 'adminAddReply', 'CommunityController::adminAddReply' );
+  $routes->post ( 'adminDeleteComment', 'CommunityController::adminDeleteComment' );
+  $routes->get ( 'adminProcessScheduledPosts', 'CommunityController::adminProcessScheduledPosts' );
+  $routes->get ( 'adminGetDashboardStats', 'CommunityController::adminGetDashboardStats' );
 } );
 
 $routes->group ( 'auth', ['namespace' => 'App\Controllers\Api'], function ( $routes )
