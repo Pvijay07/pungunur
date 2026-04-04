@@ -5,7 +5,7 @@ namespace App\Controllers\Api;
 use App\Controllers\BaseController;
 use App\Models\UserModel;
 use Config\Database;
-use App\Helpers\Sms_helper;
+use App\Libraries\Sms_helper;
 
 class AuthController extends BaseController
 {
