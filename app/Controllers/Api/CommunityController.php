@@ -514,7 +514,7 @@ class CommunityController extends BaseController
     $channels = $this->channelModel->where ( 'status', 1 )->findAll ();
 
     foreach ( $channels as &$channel ) {
-      $channel['icon_url']     = base_url ( 'admin/public/uploads/community/icons/' . $channel['icon'] );
+      $channel['icon_url']     = base_url ( 'public/uploads/community/icons/' . $channel['icon'] );
       $channel['is_joined']    = $userId ? ( $this->channelJoinModel->where ( ['user_id' => $userId, 'channel_id' => $channel['id']] )->countAllResults () > 0 ) : false;
       $channel['post_count']   = $this->postChannelModel->where ( ['channel_id' => $channel['id']] )->countAllResults ();
       $channel['member_count'] = $this->channelJoinModel->where ( ['channel_id' => $channel['id']] )->countAllResults ();
@@ -1193,7 +1193,7 @@ class CommunityController extends BaseController
       ->where ( 'community_posts.status', 'active' )
       ->countAllResults ();
 
-    $engagement = $this->postModel->select ( 'SUM(likes_count) as total_likes, SUM(comments_count) as total_comments' )->first ();
+    $engagement      = $this->postModel->select ( 'SUM(likes_count) as total_likes, SUM(comments_count) as total_comments' )->first ();
     $totalEngagement = ( (int) ( $engagement['total_likes'] ?? 0 ) ) + ( (int) ( $engagement['total_comments'] ?? 0 ) );
 
     return $this->sendResponse ( true, 'Dashboard stats retrieved', [
@@ -1262,7 +1262,7 @@ class CommunityController extends BaseController
     foreach ( $channels as &$channel ) {
       $channel['member_count'] = $this->channelJoinModel->where ( 'channel_id', $channel['id'] )->countAllResults ();
       $channel['post_count']   = $this->postChannelModel->where ( 'channel_id', $channel['id'] )->countAllResults ();
-      $channel['icon_url']     = base_url ( 'admin/public/uploads/community/icons/' . $channel['icon'] );
+      $channel['icon_url']     = base_url ( 'public/uploads/community/icons/' . $channel['icon'] );
     }
 
     $posts            = $this->postModel->select ( 'SUM(likes_count) as total_likes, SUM(comments_count) as total_comments' )->first ();
